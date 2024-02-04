@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limit Break Counter</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2, h3 {
+            margin-bottom: 5px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .team, .player {
+            margin-right: 20px;
+        }
+
+        select, button {
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        select {
+            width: 150px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        .counter {
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .counter.limit-reached {
+            color: red;
+        }
+
+        img {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="team" id="team1">
+            <h2>Team 1</h2>
+            <!-- Add counters for each role (Tank, Healer, Melee, Ranged) -->
+            <div class="player" id="tank1">
+                <h3>Tank</h3>
+                <select id="tank1Select"></select>
+                <button onclick="increaseLimitBreak('tank1')">Limit Break</button>
+                <p class="counter" id="tank1Counter">0</p>
+            </div>
+            <div class="player" id="healer1">
+                <h3>Healer</h3>
+                <select id="healer1Select"></select>
+                <button onclick="increaseLimitBreak('healer1')">Limit Break</button>
+                <p class="counter" id="healer1Counter">0</p>
+            </div>
+            <div class="player" id="melee1">
+                <h3>Melee</h3>
+                <select id="melee1Select"></select>
+                <button onclick="increaseLimitBreak('melee1')">Limit Break</button>
+                <p class="counter" id="melee1Counter">0</p>
+            </div>
+            <div class="player" id="ranged1">
+                <h3>Ranged</h3>
+                <select id="ranged1Select"></select>
+                <button onclick="increaseLimitBreak('ranged1')">Limit Break</button>
+                <p class="counter" id="ranged1Counter">0</p>
+            </div>
+        </div>
+
+        <div class="team" id="team2">
+            <h2>Team 2</h2>
+            <!-- Add counters for each role (Tank, Healer, Melee, Ranged) -->
+            <div class="player" id="tank2">
+                <h3>Tank</h3>
+                <select id="tank2Select"></select>
+                <button onclick="increaseLimitBreak('tank2')">Limit Break</button>
+                <p class="counter" id="tank2Counter">0</p>
+            </div>
+            <div class="player" id="healer2">
+                <h3>Healer</h3>
+                <select id="healer2Select"></select>
+                <button onclick="increaseLimitBreak('healer2')">Limit Break</button>
+                <p class="counter" id="healer2Counter">0</p>
+            </div>
+            <div class="player" id="melee2">
+                <h3>Melee</h3>
+                <select id="melee2Select"></select>
+                <button onclick="increaseLimitBreak('melee2')">Limit Break</button>
+                <p class="counter" id="melee2Counter">0</p>
+            </div>
+            <div class="player" id="ranged2">
+                <h3>Ranged</h3>
+                <select id="ranged2Select"></select>
+                <button onclick="increaseLimitBreak('ranged2')">Limit Break</button>
+                <p class="counter" id="ranged2Counter">0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Define roles and corresponding jobs
+        const roles = {
+            Tank: ['Paladin', 'Warrior', 'Dark Knight', 'Gunbreaker'],
+            Healer: ['White Mage', 'Scholar', 'Astrologian', 'Sage'],
+            Melee: ['Monk', 'Dragoon', 'Ninja', 'Samurai', 'Reaper'],
+            Ranged: ['Bard', 'Machinist', 'Dancer', 'Black Mage', 'Summoner', 'Red Mage']
+        };
+
+        // Define limits for each job
+        const jobLimits = {
+            Paladin: 3,
+            Warrior: 3,
+            'Dark Knight': 3,
+            Gunbreaker: 3,
+            'White Mage': 3,
+            Scholar: 3,
+            Astrologian: 3,
+            Sage: 3,
+            Monk: 3,
+            Dragoon: 3,
+            Ninja: 3,
+            Samurai: 3,
+            Reaper: 3,
+            Bard: 3,
+            Machinist: 3,
+            Dancer: 3,
+            'Black Mage': 3,
+            Summoner: 3,
+            'Red Mage': 3,
+        };
+
+        // Function to populate dropdown options
+        function populateDropdown(selectId, role) {
+            const select = document.getElementById(selectId);
+            select.innerHTML = ""; // Clear existing options
+
+            roles[role].forEach(job => {
+                const option = document.createElement("option");
+                option.value = job;
+                option.text = job;
+                select.appendChild(option);
+            });
+        }
+
+        // Function to handle Limit Break
+        function increaseLimitBreak(playerId) {
+            const counter = document.getElementById(playerId + "Counter");
+            const select = document.getElementById(playerId + "Select");
+
+            if (counter && select) {
+                let currentCount = parseInt(counter.textContent, 10) || 0;
+                const selectedJob = select.value;
+                const limit = jobLimits[selectedJob] || 3;
+
+                if (currentCount < limit) {
+                    counter.textContent = currentCount + 1;
+                } else {
+                    counter.textContent = currentCount + 1;
+                    counter.classList.add("limit-reached");
+                }
+            }
+        }
+
+        // Populate dropdowns for Team 1
+        populateDropdown("tank1Select", "Tank");
+        populateDropdown("healer1Select", "Healer");
+        populateDropdown("melee1Select", "Melee");
+        populateDropdown("ranged1Select", "Ranged");
+
+        // Populate dropdowns for Team 2
+        populateDropdown("tank2Select", "Tank");
+        populateDropdown("healer2Select", "Healer");
+        populateDropdown("melee2Select", "Melee");
+        populateDropdown("ranged2Select", "Ranged");
+    </script>
+</body>
+</html>
